@@ -6,18 +6,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RmlBlogMvc.LogicManagers.ILogicServices;
 using RmlBlogMvc.Models.BlogViewModel;
+using RmlBlogMvc.Service.Interfaces;
 
 namespace RmlBlogMvc.Controllers
 {
+    
     public class BlogController : Controller
     {
         private readonly ILogger blogControllerLogger;
         private readonly IBlogLogic blogLogic;
+        private readonly IBlogService blogService;
 
-        public BlogController(ILogger<BlogController> logger, IBlogLogic blogLogic)
+        public BlogController(ILogger<BlogController> logger, IBlogLogic blogLogic, IBlogService blogService)
         {
             blogControllerLogger = logger;
             this.blogLogic = blogLogic;
+            this.blogService = blogService;
         }
 
 
@@ -40,7 +44,18 @@ namespace RmlBlogMvc.Controllers
             return View("BlogCreated", blogViewModel);
         }
 
-        
+        public async Task<IActionResult> EditBlog(int BlogId)
+        {
+            var EditBlogActionResult = await blogLogic.CreateEditBlogViewModel(BlogId, User);
+
+            if (EditBlogActionResult==null)
+            {
+                return View(EditBlogActionResult.Value);
+            }
+
+            return EditBlogActionResult.Result;
+           
+        }
 
     }
 }

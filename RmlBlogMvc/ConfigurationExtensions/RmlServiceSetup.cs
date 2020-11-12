@@ -11,12 +11,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using RmlBlogMvc.Authorization;
 using RmlBlogMvc.Service;
 using RmlBlogMvc.Service.Interfaces;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using RmlBlogMvc.LogicServices.ILogicServices;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RmlBlogMvc.ConfigurationExtensions
 {
@@ -41,6 +43,11 @@ namespace RmlBlogMvc.ConfigurationExtensions
             services.AddScoped<IBlogLogic, BlogLogic>();
             services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<IAdminDashboardLogic, AdminDashboardLogic>();
+        }
+
+        public static void AddAuthServices(this IServiceCollection services)
+        {
+            services.AddSingleton<IAuthorizationHandler, BlogAuthHandler>();
         }
     }
 }

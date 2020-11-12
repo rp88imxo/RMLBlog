@@ -5,6 +5,7 @@ using RmlBlogMvc.Service.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,6 +34,22 @@ namespace RmlBlogMvc.Service
                 .Include(x => x.Posts)
                 .Where(x => x.BlogCreator.Id == user.Id);
             return blogs;
+        }
+
+        public async Task<Blog> GetBlogById(int BlogId)
+        {
+            return await applicationDbContext.Blogs
+                .Include(x => x.BlogCreator)
+                .Include(x => x.ApprovedByUser)
+                .Include(x => x.Posts)
+                .FirstOrDefaultAsync(x => x.Id == BlogId);
+        }
+
+        public async Task<Blog> Update(Blog blog)
+        {
+            applicationDbContext.Update(blog);
+            await applicationDbContext.SaveChangesAsync();
+            return blog;
         }
     }
 }

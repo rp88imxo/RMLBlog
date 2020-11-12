@@ -38,6 +38,9 @@ namespace RmlBlogMvc
             
             // Custom services to serve some validations and etc
             services.AddLogicServices();
+
+            // Custom auth service to check operations
+            services.AddAuthServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

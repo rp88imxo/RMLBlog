@@ -9,7 +9,9 @@ namespace RmlBlogMvc.Service.Interfaces
 {
    public interface IBlogService
     {
+        Task<Blog> Update(Blog blog);
         public IQueryable<Blog> GetBlogs(User user);
         Task<Blog> Add(Blog blog);
+        Task<Blog> GetBlogById(int BlogId);
     }
 }

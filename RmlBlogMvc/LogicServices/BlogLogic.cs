@@ -14,6 +14,9 @@ using System.IO;
 using Microsoft.Extensions.Configuration;
 
 using RmlBlogMvc.utils;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using RmlBlogMvc.Authorization;
 
 namespace RmlBlogMvc.LogicServices
 {
@@ -23,16 +26,77 @@ namespace RmlBlogMvc.LogicServices
         private readonly IBlogService blogService;
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IConfiguration configuration;
+        private readonly IAuthorizationService authorizationService;
 
-        public BlogLogic(UserManager<User> userManager, IBlogService blogService, IWebHostEnvironment env, IConfiguration configuration)
+        public BlogLogic(UserManager<User> userManager, IBlogService blogService, IAuthorizationService authorizationService, IWebHostEnvironment env, IConfiguration configuration)
         {
             this.userManager = userManager;
             this.blogService = blogService;
             webHostEnvironment = env;
             this.configuration = configuration;
+            this.authorizationService = authorizationService;
+        }
+
+        public async Task<ActionResult<EditBlogViewModel>> UpdateBlog(EditBlogViewModel editBlogViewModel, ClaimsPrincipal claimsPrincipal)
+        {
+            var blog = await blogService.GetBlogById(editBlogViewModel.Blog.Id);
+            if (blog == null)
+            {
+                return new NotFoundResult();
+            }
+
+            // Check if we have permissions to perfom an Edit Blog (need to be the same user who created a blog)
+            var authRes = await authorizationService.AuthorizeAsync(claimsPrincipal, blog, Operations.Update);
+            if (!authRes.Succeeded)
+            {
+                if (claimsPrincipal.Identity.IsAuthenticated)
+                {
+                    return new ForbidResult();
+                }
+                else
+                {
+                    return new ChallengeResult();
+                }
+            }
+
+
+
         }
 
 
+        public async Task<ActionResult<EditBlogViewModel>> CreateEditBlogViewModel(int? id, ClaimsPrincipal claimsPrincipal)
+        {
+            if (id==null)
+            {
+                return new BadRequestResult();
+            }
+
+           var blog = await blogService.GetBlogById((int)id);
+            if (blog==null)
+            {
+                return new NotFoundResult();
+            }
+            
+            // Check if we have permissions to perfom an Edit Blog (need to be the same user who created a blog
+            var authRes = await authorizationService.AuthorizeAsync(claimsPrincipal, blog, Operations.Update);
+            if (!authRes.Succeeded)
+            {
+                if (claimsPrincipal.Identity.IsAuthenticated)
+                {
+                    return new ForbidResult();
+                }
+                else
+                {
+                    return new ChallengeResult();
+                }
+            }
+
+            return new EditBlogViewModel
+            {
+                Blog = blog
+            };
+        }
+        
         public async Task<Blog> CreateBlog(NewBlogViewModel newBlogView, ClaimsPrincipal claimsPrincipal)
         {
             Blog blog = newBlogView.Blog;
@@ -54,8 +118,7 @@ namespace RmlBlogMvc.LogicServices
                 "BlogImage.jpg"
                 );
             
-            
-            
+
             RmlUtils.EnsureFolderCreated(blogImagePath);
             using (var fs = new FileStream(blogImagePath, FileMode.Create))
             {
@@ -63,6 +126,12 @@ namespace RmlBlogMvc.LogicServices
             }
 
             return blog;
+        }
+        private void UpdateBlog(Blog origin, EditBlogViewModel NewBlogVM)
+        {
+            origin.Content = NewBlogVM.Blog.Content;
+            origin.Title = NewBlogVM.Blog.Title;
+            origin.EditedTime = DateTime.Now;
         }
     }
 }
