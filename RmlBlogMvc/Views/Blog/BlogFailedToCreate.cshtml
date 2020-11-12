@@ -1,0 +1,15 @@
+﻿
+
+@model RmlBlogMvc.Models.BlogViewModel.NewBlogViewModel
+
+<div>
+    <h1>Failed to create a Blog!</h1>
+    <ul>
+        @foreach (var errors in @Html.ViewData.ModelState.Values)
+        {
+        <li>
+            @errors.RawValue.ToString()
+        </li>
+        }
+    </ul>
+</div>

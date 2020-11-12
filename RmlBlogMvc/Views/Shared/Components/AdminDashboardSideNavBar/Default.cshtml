@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using RmlBlogMvc.Data.Models
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+
+<div id="layoutSidenav_nav">
+    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+        <div class="sb-sidenav-menu">
+            <div class="nav">
+                <div class="sb-sidenav-menu-heading">Information</div>
+                <a class="nav-link" asp-controller="AdminDashboard" asp-action="Index">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Dashboard
+                </a>
+                <div class="sb-sidenav-menu-heading">Creating</div>
+                <a class="nav-link" asp-controller="Blog" asp-action="Create">
+                    <div class="sb-nav-link-icon"><i class="fas fa-mail-bulk"></i></div>
+                    Create new blog
+                </a>
+            </div>
+        </div>
+        <div class="sb-sidenav-footer">
+            <div class="small">Logges as:</div>
+            @((await UserManager.GetUserAsync(User)).FirstName)
+        </div>
+    </nav>
+</div>

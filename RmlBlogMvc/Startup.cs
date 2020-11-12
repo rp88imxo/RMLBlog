@@ -18,17 +18,26 @@ namespace RmlBlogMvc
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
-            Configuration = configuration;
+
+            var b = new ConfigurationBuilder()
+                .AddConfiguration(configuration)
+                .AddJsonFile("configs/rmlconfig.json");
+            Configuration = b.Build();
+            env = webHostEnvironment;
         }
 
-        public IConfiguration Configuration { get; }
+        public readonly IConfiguration Configuration;
+        public readonly IWebHostEnvironment env;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDefaultServices(Configuration);
+            services.AddDefaultServices(Configuration, env);
+            
+            // Custom services to serve some validations and etc
+            services.AddLogicServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

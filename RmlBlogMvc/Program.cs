@@ -21,6 +21,7 @@ namespace RmlBlogMvc
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.ConfigureAppConfiguration((b, w) => { w.AddJsonFile("configs/rmlconfig.json"); });
                 });
     }
 }

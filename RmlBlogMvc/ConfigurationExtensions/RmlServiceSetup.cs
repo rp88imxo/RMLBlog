@@ -4,16 +4,24 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RmlBlogMvc.Data;
 using RmlBlogMvc.Data.Models;
+using RmlBlogMvc.LogicManagers.ILogicServices;
+using RmlBlogMvc.LogicServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using RmlBlogMvc.Service;
+using RmlBlogMvc.Service.Interfaces;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+
 namespace RmlBlogMvc.ConfigurationExtensions
 {
     public static class RmlServiceSetup
     {
-        public static void AddDefaultServices(this IServiceCollection services, IConfiguration configuration)
+        public static void AddDefaultServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
@@ -22,6 +30,15 @@ namespace RmlBlogMvc.ConfigurationExtensions
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
+            services.AddSingleton<IFileProvider>
+                (new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), env.WebRootPath)));
+            
+        }
+
+        public static void AddLogicServices(this IServiceCollection services)
+        {
+            services.AddScoped<IBlogLogic, BlogLogic>();
+            services.AddScoped<IBlogService, BlogService>();
         }
     }
 }

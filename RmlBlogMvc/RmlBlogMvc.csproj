@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RmlBlogMvc.Data\RmlBlogMvc.Data.csproj" />
+    <ProjectReference Include="..\RmlBlogMvc.Service\RmlBlogMvc.Service.csproj" />
   </ItemGroup>
 
 </Project>
