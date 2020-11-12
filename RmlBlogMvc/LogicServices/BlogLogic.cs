@@ -38,6 +38,8 @@ namespace RmlBlogMvc.LogicServices
             Blog blog = newBlogView.Blog;
 
             blog.CreationTime = DateTime.Now;
+            blog.EditedTime = blog.CreationTime;
+
             blog.BlogCreator = await userManager.GetUserAsync(claimsPrincipal);
 
             blog = await blogService.Add(blog);

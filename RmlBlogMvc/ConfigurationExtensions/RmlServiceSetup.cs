@@ -16,6 +16,7 @@ using RmlBlogMvc.Service.Interfaces;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using RmlBlogMvc.LogicServices.ILogicServices;
 
 namespace RmlBlogMvc.ConfigurationExtensions
 {
@@ -39,6 +40,7 @@ namespace RmlBlogMvc.ConfigurationExtensions
         {
             services.AddScoped<IBlogLogic, BlogLogic>();
             services.AddScoped<IBlogService, BlogService>();
+            services.AddScoped<IAdminDashboardLogic, AdminDashboardLogic>();
         }
     }
 }

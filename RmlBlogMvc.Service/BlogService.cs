@@ -1,8 +1,10 @@
-﻿using RmlBlogMvc.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using RmlBlogMvc.Data;
 using RmlBlogMvc.Data.Models;
 using RmlBlogMvc.Service.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +23,16 @@ namespace RmlBlogMvc.Service
             applicationDbContext.Add(blog);
             await applicationDbContext.SaveChangesAsync();
             return blog;
+        }
+
+        public IQueryable<Blog> GetBlogs(User user)
+        {
+            var blogs = applicationDbContext.Blogs
+                .Include(x => x.BlogCreator)
+                .Include(x => x.ApprovedByUser)
+                .Include(x => x.Posts)
+                .Where(x => x.BlogCreator.Id == user.Id);
+            return blogs;
         }
     }
 }

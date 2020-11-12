@@ -17,8 +17,9 @@ namespace RmlBlogMvc.Data.Models
         [Required(AllowEmptyStrings =false, ErrorMessage ="Content is not valid!")]
         [MinLength(length:8, ErrorMessage ="Provide more info about your blog, min length is {1}")]
         public string Content { get; set; }
-        
         public DateTime CreationTime { get; set; }
+        public DateTime EditedTime { get; set; } // Time when blog has been edited(updated content or title)
+        public int LikesCount { get; set; }
         public bool isAllowedToPost { get; set; }
         public User ApprovedByUser { get; set; } // Approver of the blog to be post
         public bool Published { get; set; }
