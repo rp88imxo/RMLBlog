@@ -41,7 +41,17 @@ namespace RmlBlogMvc.Service
             return await applicationDbContext.Blogs
                 .Include(x => x.BlogCreator)
                 .Include(x => x.ApprovedByUser)
+                .FirstOrDefaultAsync(x => x.Id == BlogId);
+        }
+        public async Task<Blog> GetBlogByIdFull(int BlogId)
+        {
+            return await applicationDbContext.Blogs
+                .Include(x => x.BlogCreator)
+                .Include(x => x.ApprovedByUser)
                 .Include(x => x.Posts)
+                    .ThenInclude(w => w.PostCreator)
+                .Include(x => x.Posts)
+                    .ThenInclude(w => w.Posts)
                 .FirstOrDefaultAsync(x => x.Id == BlogId);
         }
 

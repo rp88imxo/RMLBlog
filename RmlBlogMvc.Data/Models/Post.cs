@@ -12,5 +12,6 @@ namespace RmlBlogMvc.Data.Models
         public User PostCreator { get; set; }
         public string Content { get; set; }
         public Post RelatedPost { get; set; }
+        public virtual IEnumerable<Post> Posts { get; set; }
     }
 }

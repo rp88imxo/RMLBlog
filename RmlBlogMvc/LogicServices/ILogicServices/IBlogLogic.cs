@@ -17,5 +17,6 @@ namespace RmlBlogMvc.LogicManagers.ILogicServices
         Task<ActionResult<EditBlogViewModel>> UpdateBlogViewModel(EditBlogViewModel editBlogViewModel, ClaimsPrincipal claimsPrincipal);
         Task<ActionResult<DeleteBlogViewModel>> DeleteBlogViewModel(int? id, ClaimsPrincipal claimsPrincipal);
         BlogsHomeViewModel GetBlogsHomeViewModel(string searchRequest, int? pageRequest);
+        Task<ActionResult<BlogViewModel>> GetBlogViewModel(int? blogid, ClaimsPrincipal claimsPrincipal);
     }
 }

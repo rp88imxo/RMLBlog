@@ -68,7 +68,37 @@ namespace RmlBlogMvc.LogicServices
             };
         }
 
-        
+        public async Task<ActionResult<BlogViewModel>> GetBlogViewModel(int? blogid, ClaimsPrincipal claimsPrincipal)
+        {
+            if (blogid == null)
+            {
+                return new BadRequestResult();
+            }
+            var blog = await blogService.GetBlogByIdFull(blogid.Value);
+
+            if (blog==null)
+            {
+                return new NotFoundResult();
+            }
+
+            /* Check if we have permissions to view an unpublished blog
+             * blog can be viewed only by Blog Creator IF it unpublished yet
+            */
+            var authRes = await authorizationService.AuthorizeAsync(claimsPrincipal, blog, Operations.Read);
+            if (!authRes.Succeeded)
+            {
+                return CheckAuthResult(claimsPrincipal);
+            }
+
+
+
+
+            return new BlogViewModel
+            {
+                Blog = blog
+            };
+
+        }
         public async Task<ActionResult<EditBlogViewModel>> UpdateBlogViewModel(EditBlogViewModel editBlogViewModel, ClaimsPrincipal claimsPrincipal)
         {
             var blog = await blogService.GetBlogById(editBlogViewModel.Blog.Id);

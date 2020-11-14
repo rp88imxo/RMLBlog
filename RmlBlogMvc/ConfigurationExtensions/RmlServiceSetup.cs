@@ -19,6 +19,8 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using RmlBlogMvc.LogicServices.ILogicServices;
 using Microsoft.AspNetCore.Authorization;
+using RmlBlogMvc.AdditionalServices.interfaces;
+using RmlBlogMvc.AdditionalServices;
 
 namespace RmlBlogMvc.ConfigurationExtensions
 {
@@ -43,6 +45,7 @@ namespace RmlBlogMvc.ConfigurationExtensions
             services.AddScoped<IBlogLogic, BlogLogic>();
             services.AddScoped<IBlogService, BlogService>();
             services.AddScoped<IAdminDashboardLogic, AdminDashboardLogic>();
+            services.AddScoped<IGetRandomService, GetRandomNumberService>();
         }
 
         public static void AddAuthServices(this IServiceCollection services)

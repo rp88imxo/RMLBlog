@@ -26,6 +26,16 @@ namespace RmlBlogMvc.Authorization
             {
                 context.Succeed(requirement);
             }
+
+            if (currentUser == resource.BlogCreator && !resource.Published && requirement.Name == Operations.Read.Name)
+            {
+                context.Succeed(requirement);
+            }
+
+            if (resource.Published && requirement.Name == Operations.Read.Name)
+            {
+                context.Succeed(requirement);
+            }
         }
     }
 }
