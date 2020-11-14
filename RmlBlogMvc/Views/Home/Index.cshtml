@@ -1,81 +1,75 @@
 ﻿
-
 @{ 
-    ViewData["Title"] = "My Blog";
+    ViewData["Title"] = "Home Page";
 }
 
- 
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-md-10 mx-auto">
-                <div class="post-preview">
-                    <a href="post.html">
-                        <h2 class="post-title">
-                            Man must explore, and this is exploration at its greatest
-                        </h2>
-                        <h3 class="post-subtitle">
-                            Problems look mighty small from 150 miles up
-                        </h3>
-                    </a>
-                    <p class="post-meta">
-                        Posted by
-                        <a href="#">Start Bootstrap</a>
-                        on September 24, 2019
-                    </p>
-                </div>
-                <hr>
-                <div class="post-preview">
-                    <a href="post.html">
-                        <h2 class="post-title">
-                            I believe every human has a finite number of heartbeats. I don't intend to waste any of mine.
-                        </h2>
-                    </a>
-                    <p class="post-meta">
-                        Posted by
-                        <a href="#">Start Bootstrap</a>
-                        on September 18, 2019
-                    </p>
-                </div>
-                <hr>
-                <div class="post-preview">
-                    <a href="post.html">
-                        <h2 class="post-title">
-                            Science has not yet mastered prophecy
-                        </h2>
-                        <h3 class="post-subtitle">
-                            We predict too much for the next year and yet far too little for the next ten.
-                        </h3>
-                    </a>
-                    <p class="post-meta">
-                        Posted by
-                        <a href="#">Start Bootstrap</a>
-                        on August 24, 2019
-                    </p>
-                </div>
-                <hr>
-                <div class="post-preview">
-                    <a href="post.html">
-                        <h2 class="post-title">
-                            Failure is not an option
-                        </h2>
-                        <h3 class="post-subtitle">
-                            Many say exploration is part of our destiny, but it’s actually our duty to future generations.
-                        </h3>
-                    </a>
-                    <p class="post-meta">
-                        Posted by
-                        <a href="#">Start Bootstrap</a>
-                        on July 8, 2019
-                    </p>
-                </div>
-                <hr>
-                <!-- Pager -->
-                <div class="clearfix">
-                    <a class="btn btn-primary float-right" href="#">Older Posts &rarr;</a>
-                </div>
+ @model RmlBlogMvc.Models.BlogsHomePageViewModel.BlogsHomeViewModel
+
+
+<div class="container">
+    <form asp-controller="Home" asp-action="Index" class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+        <div class="input-group mb-3">
+            <input asp-for="SearchRequest" type="text" class="form-control" placeholder="Search for something..." />
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" style="padding:0 10px 0 10px">Submit</button>
             </div>
         </div>
+    </form>
+    
+    <div class="row align-content-center">
+        @foreach (var blog in Model.BlogsPagedList)
+        {
+            <div class="col-lg-12 col-md-12 mb-4">
+                <div class="card border-0 shadow animated--fade-in">
+                    <img src="~/DataFiles/Blog_Files/BlogImages/@blog.Id/BlogImage.jpg" class="card-img-top" />
+                    <div class="card-body">
+                        <div class="row" style="margin:0px 0px 0px 0px;">
+                            <div>
+                                <h3 class="card-title mb-0">@blog.Title</h3>
+                            </div>
+                        </div>
+                        <div class="row ml-0 mt-3 align-items-center">
+                            <div>
+                                <i class="fas fa-calendar-alt " style="color:Highlight"></i>
+                            </div>
+                            <p class="text-muted ml-3 ">Last edit: @blog.EditedTime.ToString("dd/MM/yyyy")</p>
+                        </div>
+                        <div class="row ml-0 align-items-center" style="bottom:0;">
+                            <div><i class="fas fa-comment" style="color:Highlight"></i></div>
+                            <p class="text-muted ml-3 ">@blog.Posts.Count() comments</p>
+                        </div>
+                        <div class="row ml-0 align-items-center" style="bottom:0;">
+                            <div><i class="fas fa-heart" style="color:darkred"></i></div>
+                            <p class="text-muted ml-3 ">@blog.LikesCount</p>
+                        </div>
+                        <div class="row ml-0 align-items-center" style="bottom:0;">
+                            <div><i class="fas fa-pen-alt" style="color:Highlight"></i></div>
+                            <p class="text-muted ml-3 ">Author: @blog.BlogCreator.FirstName</p>
+                        </div>
+                    </div>
+                    <div class="card-footer ">
+                        <div class="row flex-fill nav-fill">
+                            <div class="col-auto flex-fill nav-fill d-flex">
+                                <a asp-controller="Home" asp-action="Blog" asp-route-id="@blog.Id" class="btn btn-info">
+                                    <i class="fa fa-arrow-alt-circle-right"></i> read blog
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
+    @{
+        if (Model.CurrentPage != 1 || Model.BlogsPagedList.Count >= 1)
+        {
+            <pager class="pager-container" list="@Model.BlogsPagedList" options="@PagedList.Core.Mvc.PagedListRenderOptions.Bootstrap4PageNumbersOnly" asp-action="Index" asp-controller="Home" asp-route-search="@Model.SearchRequest"></pager>
+        }
+    }
+
+</div>
+    
 
     
     

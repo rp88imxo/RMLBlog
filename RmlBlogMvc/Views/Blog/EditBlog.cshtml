@@ -5,3 +5,79 @@
 }
 
 
+@using RmlBlogMvc.Models.BlogViewModel
+@{
+    ViewData["Title"] = "New Blog Creation";
+}
+
+@model EditBlogViewModel
+
+@section Styles{
+    <style>
+    </style>
+}
+
+<div class="container-fluid">
+    <div class="form-group mt-5 text-break">
+        <h1>EDIT YOUR BLOG</h1>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-6">
+            <div class="card mb-4 mb-md-3">
+                <form asp-controller="Blog" asp-action="UpdateBlog" method="post" enctype="multipart/form-data">
+                    <div class="card-header">
+                        <i class="fas fa-pen-nib"></i>
+                        Fill new info about your blog
+                        <div asp-validation-summary="ModelOnly" class="text-warning"></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <input asp-for="Blog.Id" readonly="readonly" type="hidden"/>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Blog.Title"></label>
+                            <input asp-for="Blog.Title" class="form-control" />
+                            <span asp-validation-for="Blog.Title" class="text-info"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Blog.Content"></label>
+                            <textarea asp-for="Blog.Content" class="form-control textarea" rows="3"></textarea>
+                            <span asp-validation-for="Blog.Content" class="text-info"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="BlogHeaderImage"></label>
+                            <div class="custom-file">
+                                <input asp-for="BlogHeaderImage" class="custom-file-input" size="32" accept="image/*"/>
+                                <label class="custom-file-label">Select File</label>
+                            </div>
+                            <span asp-validation-for="BlogHeaderImage" class="text-info"></span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="form-group">
+                            <label>Publish now</label>
+                            <input type="checkbox" data-toggle="toggle" asp-for="Blog.Published" />
+                            <hr />
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts{
+    <script src="https://cdn.ckeditor.com/ckeditor5/23.1.0/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('textarea'))
+            .catch(error => { console.error(error) });
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        })
+    </script>
+}

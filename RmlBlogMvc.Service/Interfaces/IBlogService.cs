@@ -13,5 +13,7 @@ namespace RmlBlogMvc.Service.Interfaces
         public IQueryable<Blog> GetBlogs(User user);
         Task<Blog> Add(Blog blog);
         Task<Blog> GetBlogById(int BlogId);
+        Task<int> Delete(Blog blog);
+        IQueryable<Blog> GetBlogsBySearchRequest(string searchRequest);
     }
 }

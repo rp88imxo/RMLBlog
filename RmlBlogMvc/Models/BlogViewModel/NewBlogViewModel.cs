@@ -14,6 +14,7 @@ namespace RmlBlogMvc.Models.BlogViewModel
         [Required]
         [DisplayName("Blog Image")]
         public IFormFile BlogHeaderImage { get; set; }
+        [Required]
         public Blog Blog { get; set; }
 
     }

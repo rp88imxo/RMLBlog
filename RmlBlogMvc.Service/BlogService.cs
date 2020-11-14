@@ -51,5 +51,20 @@ namespace RmlBlogMvc.Service
             await applicationDbContext.SaveChangesAsync();
             return blog;
         }
+        public async Task<int> Delete(Blog blog)
+        {
+            applicationDbContext.Remove(blog);
+            return await applicationDbContext.SaveChangesAsync();
+        }
+        public IQueryable<Blog> GetBlogsBySearchRequest(string searchRequest)
+        {
+            return applicationDbContext.Blogs
+                .OrderByDescending(x => x.EditedTime)
+                .Include(x => x.BlogCreator)
+                .Include(x => x.Posts)
+                .Where(x => x.Title.Contains(searchRequest) || x.Content.Contains(searchRequest))
+                .AsQueryable();
+                
+        }
     }
 }

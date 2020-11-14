@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RmlBlogMvc.Models.BlogViewModel
 {
-    public class EditBlogViewModel
+    public class DeleteBlogViewModel
     {
         [DisplayName("Blog Image")]
         public IFormFile BlogHeaderImage { get; set; }

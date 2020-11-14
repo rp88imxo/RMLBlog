@@ -5,25 +5,33 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RmlBlogMvc.LogicManagers.ILogicServices;
 using RmlBlogMvc.Models;
 
 namespace RmlBlogMvc.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<HomeController> homeLogger;
+        private readonly IBlogLogic blogLogic;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IBlogLogic blogLogic)
         {
-            _logger = logger;
+            homeLogger = logger;
+            this.blogLogic = blogLogic;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string searchRequest, int? page)
         {
-            return View();
+            var blogsHomeVM = blogLogic.GetBlogsHomeViewModel(searchRequest, page);
+            return View(blogsHomeVM);
         }
 
-       
+        public IActionResult NotFoundPage()
+        {
+            return View("NotFoundPage");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

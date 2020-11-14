@@ -1,0 +1,19 @@
+﻿
+@{ 
+    Layout = "";
+}
+
+@await Html.PartialAsync("_sb2imports")
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <!-- 404 Error Text -->
+    <div class="text-center">
+        <div class="error mx-auto" data-text="404">404</div>
+        <p class="lead text-gray-800 mb-5">Page you are looking for is missing... </p>
+        <p class="text-gray-500 mb-0">...or you just have a bad day</p>
+        <a asp-controller="Home" asp-action="Index">&larr; Return to main page</a>
+    </div>
+
+</div>
+<!-- /.container-fluid -->

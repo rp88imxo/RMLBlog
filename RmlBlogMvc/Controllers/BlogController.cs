@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RmlBlogMvc.LogicManagers.ILogicServices;
@@ -10,7 +11,7 @@ using RmlBlogMvc.Service.Interfaces;
 
 namespace RmlBlogMvc.Controllers
 {
-    
+    [Authorize]
     public class BlogController : Controller
     {
         private readonly ILogger blogControllerLogger;
@@ -37,25 +38,52 @@ namespace RmlBlogMvc.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return BadRequest(ModelState);
             }
-            var blog = await blogLogic.CreateBlog(blogViewModel, User);
+            await blogLogic.CreateBlog(blogViewModel, User);
             
-            return View("BlogCreated", blogViewModel);
+            return RedirectToAction("Index", "AdminDashboard");
         }
 
         public async Task<IActionResult> EditBlog(int BlogId)
         {
-            var EditBlogActionResult = await blogLogic.CreateEditBlogViewModel(BlogId, User);
+            var EditBlogActionResult = await blogLogic.EditBlogViewModel(BlogId, User);
 
-            if (EditBlogActionResult==null)
+            if (EditBlogActionResult.Result==null)
             {
                 return View(EditBlogActionResult.Value);
             }
 
             return EditBlogActionResult.Result;
-           
         }
 
+        
+        
+        public async Task<IActionResult> UpdateBlog(EditBlogViewModel editBlogViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("NotFoundPage");
+            }
+            var UpdateBlogActionResult = await blogLogic.UpdateBlogViewModel(editBlogViewModel, User);
+
+            if (UpdateBlogActionResult.Result == null)
+            {
+                return RedirectToAction("Index", "AdminDashboard");
+            }
+
+            return UpdateBlogActionResult.Result;
+        }
+        public async Task<IActionResult> DeleteBlog(int BlogId)
+        {
+            var DeleteBlogActionResult = await blogLogic.DeleteBlogViewModel(BlogId, User);
+
+            if (DeleteBlogActionResult.Result == null)
+            {
+                return RedirectToAction("Index", "AdminDashboard");
+            }
+
+            return DeleteBlogActionResult.Result;
+        }
     }
 }

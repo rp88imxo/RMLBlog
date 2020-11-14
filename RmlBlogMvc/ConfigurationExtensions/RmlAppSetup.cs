@@ -36,6 +36,7 @@ namespace RmlBlogMvc.ConfigurationExtensions
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapFallbackToController("NotFoundPage","Home");
                 endpoints.MapRazorPages();
             });
         }

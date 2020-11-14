@@ -47,7 +47,7 @@ namespace RmlBlogMvc.ConfigurationExtensions
 
         public static void AddAuthServices(this IServiceCollection services)
         {
-            services.AddSingleton<IAuthorizationHandler, BlogAuthHandler>();
+            services.AddScoped<IAuthorizationHandler, BlogAuthHandler>();
         }
     }
 }
