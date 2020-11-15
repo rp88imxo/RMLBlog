@@ -1,4 +1,5 @@
 {
   "ServerFilesFolder": "DataFiles",
-  "BlogFilesFolder": "Blog_Files"
+  "BlogFilesFolder": "Blog_Files",
+  "UserFilesFolder": "User_Files"
 }

@@ -37,20 +37,26 @@ namespace RmlBlogMvc.ConfigurationExtensions
             services.AddRazorPages();
             services.AddSingleton<IFileProvider>
                 (new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), env.WebRootPath)));
-            
+          
         }
 
         public static void AddLogicServices(this IServiceCollection services)
         {
-            services.AddScoped<IBlogLogic, BlogLogic>();
-            services.AddScoped<IBlogService, BlogService>();
-            services.AddScoped<IAdminDashboardLogic, AdminDashboardLogic>();
             services.AddScoped<IGetRandomService, GetRandomNumberService>();
+           
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IBlogService, BlogService>();
+            services.AddScoped<IPostService, PostService>();
+
+            services.AddScoped<IHomeLogic, HomeLogic>();
+            services.AddScoped<IBlogLogic, BlogLogic>();
+            services.AddScoped<IAdminDashboardLogic, AdminDashboardLogic>();
         }
 
         public static void AddAuthServices(this IServiceCollection services)
         {
             services.AddScoped<IAuthorizationHandler, BlogAuthHandler>();
+            services.AddScoped<IAuthorizationHandler, UserAuthHandler>();
         }
     }
 }

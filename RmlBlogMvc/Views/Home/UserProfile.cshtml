@@ -1,13 +1,12 @@
 ﻿
+@model RmlBlogMvc.Models.UserViewModel.UserProfileViewModel
 @{ 
-    ViewData["Title"] = "Home Page";
+    Layout = "_UserProfileLayout";
+    ViewData["Title"] = Model._User.FirstName + " Profile";
 }
 
- @model RmlBlogMvc.Models.BlogsHomePageViewModel.BlogsHomeViewModel
-
-
 <div class="container mt-2">
-    <form asp-controller="Home" asp-action="Index" class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+    <form asp-controller="Home" asp-action="UserProfile" asp-route-uid="@Model._User.Id" class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
         <div class="input-group mb-3">
             <input asp-for="SearchRequest" type="text" class="form-control" placeholder="Search for something..." />
             <div class="input-group-append">
@@ -15,7 +14,7 @@
             </div>
         </div>
     </form>
-    
+
     <div class="row align-content-center">
         @foreach (var blog in Model.BlogsPagedList)
         {
@@ -40,18 +39,15 @@
                         </div>
                         <div class="row ml-0 align-items-center" style="bottom:0;">
                             <div><i class="fas fa-heart" style="color:darkred"></i></div>
-                            <p class="text-muted ml-3 ">@blog.LikesCount</p>
+                            <p class="text-muted ml-3 ">@blog.LikesCount Like(s)</p>
                         </div>
-                        <div class="row ml-0 align-items-center" style="bottom:0;">
-                            <div><i class="fas fa-pen-alt" style="color:Highlight"></i></div>
-                            <p class="text-muted ml-3 ">Author: @blog.BlogCreator.FirstName</p>
-                        </div>
+                        
                     </div>
                     <div class="card-footer ">
                         <div class="row flex-fill nav-fill">
                             <div class="col-auto flex-fill nav-fill d-flex">
                                 <a asp-controller="Home" asp-action="Blog" asp-route-blogid="@blog.Id" class="btn btn-info">
-                                    <i class="fa fa-arrow-alt-circle-right"></i> read blog
+                                    <i class="fa fa-arrow-alt-circle-right"></i> Read blog
                                 </a>
                             </div>
 
@@ -61,14 +57,9 @@
             </div>
         }
     </div>
-   
     <page-list-hider totall="@Model.BlogsPagedList.TotalItemCount">
         <pager class="pager-container" list="@Model.BlogsPagedList" options="@PagedList.Core.Mvc.PagedListRenderOptions.Bootstrap4PageNumbersOnly" asp-action="Index" asp-controller="Home" asp-route-search="@Model.SearchRequest"></pager>
     </page-list-hider>
-     
+
 
 </div>
-    
-
-    
-    

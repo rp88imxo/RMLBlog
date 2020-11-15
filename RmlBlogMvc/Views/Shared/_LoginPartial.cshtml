@@ -17,6 +17,12 @@
     <li class="nav-item">
         <a class="nav-link" asp-controller="AdminDashboard" asp-action="Index">Admin Dashboard</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Home" asp-action="UserAbout">About me page</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Home" asp-action="UserProfile" asp-route-uid="@((await UserManager.GetUserAsync(User)).Id)">Profile</a>
+    </li>
 }
 else
 {

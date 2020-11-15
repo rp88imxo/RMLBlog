@@ -1,0 +1,66 @@
+﻿@{ 
+    ViewData["Title"] = "User About";
+}
+@model RmlBlogMvc.Models.UserViewModel.UserAboutInfoViewModel
+
+<div class="container-fluid">
+    <div class="form-group mt-5 text-break">
+        <h1>SETTINGS</h1>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-6">
+            <div class="card mb-4 mb-md-3">
+                <form asp-controller="AdminDashboard" asp-action="UserAbout" method="post" enctype="multipart/form-data">
+                    <div class="card-header">
+                        <i class="fas fa-pen-nib"></i>
+                        Share info about you with others
+                        <div asp-validation-summary="ModelOnly" class="text-warning"></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label asp-for="AboutInfoHeader"></label>
+                            <input asp-for="AboutInfoHeader" class="form-control" />
+                            <span asp-validation-for="AboutInfoHeader" class="text-info"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="AboutInfoContent"></label>
+                            <textarea asp-for="AboutInfoContent" class="form-control textarea" rows="3"></textarea>
+                            <span asp-validation-for="AboutInfoContent" class="text-info"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="AboutImage"></label>
+                            <div class="custom-file">
+                                <input asp-for="AboutImage" class="custom-file-input" size="32" accept="image/*" />
+                                <label class="custom-file-label">Select Preffered Title Image</label>
+                            </div>
+                            <span asp-validation-for="AboutImage" class="text-info"></span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <label>Allowed to view to other users?</label>
+                        <input type="checkbox" data-toggle="toggle" asp-for="AllowedToOthers" />
+                        <hr />
+                        <div class="form-group">
+                            <button class="btn btn-primary" type="submit">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts{
+    <script src="https://cdn.ckeditor.com/ckeditor5/23.1.0/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('textarea'))
+            .catch(error => { console.error(error) });
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        })
+    </script>
+}

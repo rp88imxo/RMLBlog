@@ -26,6 +26,28 @@ namespace RmlBlogMvc.Service
             return blog;
         }
 
+        public async Task<Post> GetPostById(int id)
+        {
+            return await applicationDbContext.Posts
+                .Include(x => x.PostCreator)
+                .Include(x => x.RelatedPost)
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public IQueryable<Blog> GetBlogsByUserFull(User user)
+        {
+            var blogs = applicationDbContext.Blogs
+                .OrderByDescending(x=>x.EditedTime)
+                .Include(x => x.BlogCreator)
+                .Include(x => x.ApprovedByUser)
+                .Include(x => x.Posts)
+                    .ThenInclude(w => w.PostCreator)
+                .Include(x => x.Posts)
+                    .ThenInclude(w => w.Posts)
+                .Where(x => x.BlogCreator.Id == user.Id);
+            return blogs;
+        }
+
         public IQueryable<Blog> GetBlogs(User user)
         {
             var blogs = applicationDbContext.Blogs
@@ -55,6 +77,19 @@ namespace RmlBlogMvc.Service
                 .FirstOrDefaultAsync(x => x.Id == BlogId);
         }
 
+        public async Task<Blog> GetBlogByIdWithAllReplies(int BlogId)
+        {
+            return await applicationDbContext.Blogs
+                .Include(x => x.BlogCreator)
+                .Include(x => x.ApprovedByUser)
+                .Include(x => x.Posts)
+                    .ThenInclude(w => w.PostCreator)
+                .Include(x => x.Posts)
+                    .ThenInclude(w => w.Posts)
+                        .ThenInclude(w=>w.RelatedPost)
+                .FirstOrDefaultAsync(x => x.Id == BlogId);
+        }
+
         public async Task<Blog> Update(Blog blog)
         {
             applicationDbContext.Update(blog);
@@ -72,9 +107,10 @@ namespace RmlBlogMvc.Service
                 .OrderByDescending(x => x.EditedTime)
                 .Include(x => x.BlogCreator)
                 .Include(x => x.Posts)
-                .Where(x => x.Title.Contains(searchRequest) || x.Content.Contains(searchRequest))
-                .AsQueryable();
+                .Where(x => x.Title.Contains(searchRequest) || x.Content.Contains(searchRequest));
                 
         }
+
+        
     }
 }

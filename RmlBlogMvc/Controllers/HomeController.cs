@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RmlBlogMvc.LogicManagers.ILogicServices;
+using RmlBlogMvc.LogicServices.ILogicServices;
 using RmlBlogMvc.Models;
 using RmlBlogMvc.Models.BlogViewModel;
 
@@ -16,14 +17,38 @@ namespace RmlBlogMvc.Controllers
     {
         private readonly ILogger<HomeController> homeLogger;
         private readonly IBlogLogic blogLogic;
+        private readonly IAdminDashboardLogic adminDashboardService;
+        private readonly IHomeLogic homeLogic;
 
-        public HomeController(ILogger<HomeController> logger, IBlogLogic blogLogic)
+        public HomeController(ILogger<HomeController> logger, 
+            IBlogLogic blogLogic, 
+            IAdminDashboardLogic adminDashboardService,
+            IHomeLogic homeLogic)
         {
             homeLogger = logger;
             this.blogLogic = blogLogic;
+            this.adminDashboardService = adminDashboardService;
+            this.homeLogic = homeLogic;
         }
 
+        [Authorize]
+        public async Task<IActionResult> UserAbout()
+        {
+            var currentUserAboutInfoVM = await adminDashboardService.GetUserAboutInfoViewModel(User);
+            return View(currentUserAboutInfoVM);
+        }
         
+        public async Task<IActionResult> UserProfile(string uid, string searchRequest, int? page)
+        {
+            var userProfileVM = await homeLogic.GetUserProfile(uid, searchRequest, page, User);
+            if (userProfileVM.Result==null)
+            {
+                return View(userProfileVM.Value);
+            }
+
+            return userProfileVM.Result;
+        }
+
         public IActionResult Index(string searchRequest, int? page)
         {
             var blogsHomeVM = blogLogic.GetBlogsHomeViewModel(searchRequest, page);

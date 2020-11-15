@@ -9,5 +9,6 @@ namespace RmlBlogMvc.Models.BlogViewModel
     public class BlogViewModel
     {
         public Blog Blog { get; set; }
+        public Post Post { get; set; }
     }
 }

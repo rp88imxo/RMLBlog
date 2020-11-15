@@ -11,5 +11,9 @@ namespace RmlBlogMvc.Data.Models
         public string FirstName { get; set; }
         [PersonalData]
         public string LastName { get; set; }
+
+        public string UserAboutInfoHeader { get; set; }
+        public string UserAboutInfoContent { get; set; }
+        public bool UserAboutInfoAllowedToOthers { get; set; }
     }
 }
