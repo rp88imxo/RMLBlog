@@ -57,8 +57,24 @@ namespace RmlBlogMvc.Controllers
             return EditBlogActionResult.Result;
         }
 
-        
-        
+        [HttpPost]
+        public async Task<IActionResult> Post(BlogViewModel BlogViewModel)
+        {
+            //if (!ModelState.IsValid)
+            //{
+            //    return View("NotFoundPage");
+            //}
+            var CreatePostActionResult = await blogLogic.CreatePost(BlogViewModel, User);
+
+            if (CreatePostActionResult.Result == null)
+            {
+
+                return RedirectToAction("Blog","Home", new {blogid= BlogViewModel.Blog.Id });
+            }
+
+            return CreatePostActionResult.Result;
+        }
+
         public async Task<IActionResult> UpdateBlog(EditBlogViewModel editBlogViewModel)
         {
             if (!ModelState.IsValid)

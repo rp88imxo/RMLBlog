@@ -1,6 +1,6 @@
 ﻿
 @model RmlBlogMvc.Models.BlogViewModel.BlogViewModel
-@{ 
+@{
     Layout = "_BlogLayout";
     ViewData["Title"] = "Blog - " + Model.Blog.Title;
 }
@@ -12,6 +12,97 @@
                 @Html.Raw(Model.Blog.Content)
             </div>
         </div>
+        <div class="row mt-5">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <h3 class="mb-5">@Model.Blog.Posts.Count() Comments</h3>
+                <hideposts class="comment-list  comment-top" totall="@Model.Blog.Posts.Count()" min-count="0">
+                    <ul class="comment-list  comment-top">
+                        @foreach (var comment in Model.Blog.Posts.Where(comment => comment.RelatedPost is null))
+                        {
+                            <li class="comment" style="margin-top: 30px;">
+                                <div class="comment-body">
+                                    <h4 class="commenter-name">@comment.PostCreator.FirstName @comment.PostCreator.LastName</h4>
+                                    <div class="comment-date">@comment.CreationTime.ToString("MMMM d, yyyy hh:mm tt")</div>
+                                    <p class="comment-message">@comment.Content</p>
+                                    @if (!User.Identity.IsAuthenticated)
+                                    {
+                                        <a class="reply-btn btn" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~/Post/@Model.Post.Id">Login to reply</a>
+                                    }
+                                    else
+                                    {
+                                        <a aria-expanded="false" href="@($"#replyComment{comment.Id}")" data-toggle="collapse" class="reply-btn btn">Reply</a>
+                                    }
+                                </div>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <div class="collapse" id="@($"replyComment{comment.Id}")">
+                                        <form asp-controller="Blog" asp-action="Post">
+                                            <input asp-for="Blog.Id" readonly hidden />
+                                            <input asp-for="Post.RelatedPost.Id" value="@comment.Id" readonly hidden />
+                                            <div class="form-group">
+                                                <label for="comment">Write a reply</label>
+                                                <textarea asp-for="Post.Content" class="form-control" rows="3"></textarea>
+                                                <button type="submit" class="btn btn-outline-primary post-btn">Post</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                }
+                                <ul class="comment-list" list="@comment.Posts" count="0" style="margin-left: 30px; margin-top:0;">
+                                    @foreach (var reply in comment.Posts)
+                                    {
+                                        <li class="comment">
+                                            <div class="comment-body">
+                                                <h3 class="commenter-name">@reply.PostCreator.FirstName @reply.PostCreator.LastName</h3>
+                                                <div class="comment-date">@reply.CreationTime.ToString("MMMM d, yyyy hh:mm tt")</div>
+                                                <p class="comment-message">@reply.Content</p>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                            <hr />
+                        }
+                    </ul>
+                </hideposts>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div>
+                        <form asp-controller="Blog" asp-action="Post">
+                            <input asp-for="Blog.Id" readonly hidden />
+                            <div class="form-group">
+                                <label for="comment">Post</label>
+                                <textarea asp-for="Post.Content" class="form-control" rows="3" required></textarea>
+                                <button type="submit" class="btn btn-outline-primary post-btn">Post</button>
+                            </div>
+                        </form>
+                    </div>
+                }
+                else
+                {
+                    <a class="reply-btn btn" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~/Post/@Model.Post.Id">Login to Comment on this Post</a>
+                }
+            </div>
+        </div>
     </div>
 </article>
+
+@section Scripts {
+    <script>
+        $('[data-toggle="collapse"]').on('click', function () {
+            var $this = $(this),
+                $parent = typeof $this.data('parent') !== 'undefined' ? $($this.data('parent')) : undefined;
+            if ($parent === undefined) { 
+                $this.find('.glyphicon').toggleClass('glyphicon-plus glyphicon-minus');
+                return true;
+            }
+
+            
+            var currentIcon = $this.find('.glyphicon');
+            currentIcon.toggleClass('glyphicon-plus glyphicon-minus');
+            $parent.find('.glyphicon').not(currentIcon).removeClass('glyphicon-minus').addClass('glyphicon-plus');
+
+        });
+    </script>
+}
 

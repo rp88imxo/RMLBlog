@@ -21,6 +21,7 @@ using Microsoft.Extensions.Logging;
 using RmlBlogMvc.Models.BlogsHomePageViewModel;
 using RmlBlogMvc.CONST_PATHS;
 using PagedList.Core;
+using RmlBlogMvc.Service;
 
 namespace RmlBlogMvc.LogicServices
 {
@@ -28,6 +29,7 @@ namespace RmlBlogMvc.LogicServices
     {
         private readonly UserManager<User> userManager;
         private readonly IBlogService blogService;
+        private readonly IPostService postService;
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IConfiguration configuration;
         private readonly IAuthorizationService authorizationService;
@@ -38,7 +40,8 @@ namespace RmlBlogMvc.LogicServices
             IAuthorizationService authorizationService, 
             IWebHostEnvironment env, 
             IConfiguration configuration,
-            ILogger<BlogLogic> blogLogicLogger
+            ILogger<BlogLogic> blogLogicLogger,
+            IPostService postService
             )
         {
             this.userManager = userManager;
@@ -47,8 +50,38 @@ namespace RmlBlogMvc.LogicServices
             this.configuration = configuration;
             this.authorizationService = authorizationService;
             this.blogLogicLogger = blogLogicLogger;
+            this.postService = postService;
         }
 
+        public async Task<ActionResult<Post>> CreatePost(BlogViewModel blogViewModel, ClaimsPrincipal claimsPrincipal)
+        {
+            if (blogViewModel.Blog==null )
+            {
+                return new BadRequestResult();
+            }
+
+            var blog = await blogService.GetBlogByIdWithAllReplies(blogViewModel.Blog.Id);
+            if (blog ==null)
+            {
+                return new NotFoundResult();
+            }
+
+            var post = blogViewModel.Post;
+            await UpdatePostFields(post, blog, claimsPrincipal);
+            if (post.RelatedPost != null)
+            {
+                post.RelatedPost = await postService.GetPostById(post.RelatedPost.Id);
+            }
+
+            await postService.Add(post);
+            return post;
+        }
+        private async Task UpdatePostFields(Post post,Blog blog, ClaimsPrincipal claimsPrincipal)
+        {
+            post.PostCreator = await userManager.GetUserAsync(claimsPrincipal);
+            post.Blog = blog;
+            post.CreationTime = DateTime.Now;
+        }
         public BlogsHomeViewModel GetBlogsHomeViewModel(string searchRequest, int? pageRequest)
         {
             int currentPage = pageRequest == null || pageRequest < 1 ? 1 : (int)pageRequest;

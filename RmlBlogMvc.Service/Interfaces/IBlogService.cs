@@ -17,6 +17,8 @@ namespace RmlBlogMvc.Service.Interfaces
         IQueryable<Blog> GetBlogsBySearchRequest(string searchRequest);
         Task<Blog> GetBlogByIdFull(int BlogId);
         IQueryable<Blog> GetBlogsByUserFull(User user);
-       
+        Task<Blog> GetBlogByIdWithAllReplies(int BlogId);
+
+
     }
 }
