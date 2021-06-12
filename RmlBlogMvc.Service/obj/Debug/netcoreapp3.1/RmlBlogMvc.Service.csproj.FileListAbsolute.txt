@@ -1,0 +1,12 @@
+M:\MyStuff\CSharpWebDev\RmlBlogMvc\RmlBlogMvc.Service\bin\Debug\netcoreapp3.1\RmlBlogMvc.Service.deps.json
+M:\MyStuff\CSharpWebDev\RmlBlogMvc\RmlBlogMvc.Service\bin\Debug\netcoreapp3.1\RmlBlogMvc.Service.dll
+M:\MyStuff\CSharpWebDev\RmlBlogMvc\RmlBlogMvc.Service\bin\Debug\netcoreapp3.1\RmlBlogMvc.Service.pdb
+M:\MyStuff\CSharpWebDev\RmlBlogMvc\RmlBlogMvc.Service\obj\Debug\netcoreapp3.1\RmlBlogMvc.Service.csprojAssemblyReference.cache
+M:\MyStuff\CSharpWebDev\RmlBlogMvc\RmlBlogMvc.Service\obj\Debug\netcoreapp3.1\RmlBlogMvc.Service.AssemblyInfoInputs.cache
+M:\MyStuff\CSharpWebDev\RmlBlogMvc\RmlBlogMvc.Service\obj\Debug\netcoreapp3.1\RmlBlogMvc.Service.AssemblyInfo.cs
+M:\MyStuff\CSharpWebDev\RmlBlogMvc\RmlBlogMvc.Service\obj\Debug\netcoreapp3.1\RmlBlogMvc.Service.csproj.CoreCompileInputs.cache
+M:\MyStuff\CSharpWebDev\RmlBlogMvc\RmlBlogMvc.Service\obj\Debug\netcoreapp3.1\RmlBlogMvc.Service.dll
+M:\MyStuff\CSharpWebDev\RmlBlogMvc\RmlBlogMvc.Service\obj\Debug\netcoreapp3.1\RmlBlogMvc.Service.pdb
+M:\MyStuff\CSharpWebDev\RmlBlogMvc\RmlBlogMvc.Service\bin\Debug\netcoreapp3.1\RmlBlogMvc.Data.dll
+M:\MyStuff\CSharpWebDev\RmlBlogMvc\RmlBlogMvc.Service\bin\Debug\netcoreapp3.1\RmlBlogMvc.Data.pdb
+M:\MyStuff\CSharpWebDev\RmlBlogMvc\RmlBlogMvc.Service\obj\Debug\netcoreapp3.1\RmlBlogMvc.Service.csproj.CopyComplete
